@@ -3,6 +3,7 @@ package com.project.csfkids.csflocalscard;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -54,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements PHPListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        getSupportActionBar().hide();
         // Set up the variables
         //Text Inputs
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
