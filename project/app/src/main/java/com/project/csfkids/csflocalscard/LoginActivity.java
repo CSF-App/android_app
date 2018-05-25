@@ -63,6 +63,12 @@ public class LoginActivity extends AppCompatActivity implements PHPListener {
         //Buttons
         Button signInButton = (Button) findViewById(R.id.sign_in_button);
         Button signUpButton = (Button) findViewById(R.id.sign_up_button);
+        Button backButton = (Button) findViewById(R.id.back_button);
+        backButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("backButton", "Clicked");
+            }
+        });
         //Views
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
