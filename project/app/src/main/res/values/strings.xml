@@ -15,4 +15,5 @@
     </string>
     <string name="action_sign_up">Sign up</string>
     <string name="url_login">http://10.0.2.2/</string>
+    <string name="title_activity_main">Map</string>
 </resources>

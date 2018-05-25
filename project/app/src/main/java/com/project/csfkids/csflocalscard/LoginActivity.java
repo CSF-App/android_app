@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements PHPListener {
         Button backButton = (Button) findViewById(R.id.back_button);
         backButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                Log.d("backButton", "Clicked");
+                switchToMain();
             }
         });
         //Views
@@ -82,6 +83,10 @@ public class LoginActivity extends AppCompatActivity implements PHPListener {
         });
     }
 
+    private void switchToMain(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
     private void attemptLogin() {
         if (mAuthTask != null) { //If already attempting
             return;
