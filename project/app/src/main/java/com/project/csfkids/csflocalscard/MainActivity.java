@@ -22,8 +22,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
-
+    }//https://github.com/umano/AndroidSlidingUpPanel
+//    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
     /**
      * Manipulates the map once available.
@@ -37,10 +37,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setMinZoomPreference(15.0f);
+        mMap.setMaxZoomPreference(20.0f);
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng coronado = new LatLng(32.6859, -117.1831);
+        mMap.addMarker(new MarkerOptions().position(coronado).title("Marker in Coronado"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
     }
 }
