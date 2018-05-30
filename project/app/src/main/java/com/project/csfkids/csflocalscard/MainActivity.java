@@ -27,6 +27,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         SlidingUpPanelLayout sl = (SlidingUpPanelLayout)findViewById(R.id.sliding_layout);
     }//https://github.com/umano/AndroidSlidingUpPanel
+    //https://github.com/Manabu-GT/EtsyBlur BLUR EFFECT
 //    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
     /**
