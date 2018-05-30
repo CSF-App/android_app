@@ -1,5 +1,6 @@
 package com.project.csfkids.csflocalscard;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -22,6 +24,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        SlidingUpPanelLayout sl = (SlidingUpPanelLayout)findViewById(R.id.sliding_layout);
     }//https://github.com/umano/AndroidSlidingUpPanel
 //    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
@@ -39,6 +43,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMinZoomPreference(15.0f);
         mMap.setMaxZoomPreference(20.0f);
+        mMap.setPadding(40,0,0,60);
         // Add a marker in Sydney and move the camera
         LatLng coronado = new LatLng(32.6859, -117.1831);
         mMap.addMarker(new MarkerOptions().position(coronado).title("Marker in Coronado"));

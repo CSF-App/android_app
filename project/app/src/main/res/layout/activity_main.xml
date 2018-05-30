@@ -21,20 +21,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:umanoPanelHeight="68dp"
-    sothree:umanoShadowHeight="4dp">
+    sothree:umanoPanelHeight="40dp"
+    sothree:umanoShadowHeight="0dp"
+    sothree:umanoOverlay="true">
 <include
     android:id="@+id/activity_main_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     layout="@layout/activity_main_main" />
 
-    <LinearLayout
+    <include
         android:id="@+id/lcard_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:gravity="center|bottom"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical"
+        android:background="#00000000"
+        layout="@layout/lcard"
+        />
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
     <android.support.design.widget.NavigationView
