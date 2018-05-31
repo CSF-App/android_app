@@ -1,8 +1,14 @@
 package com.project.csfkids.csflocalscard;
 
+import android.graphics.Bitmap;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,10 +18,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import jp.wasabeef.blurry.Blurry;
+
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private LinearLayout main_Main;
+    private int mMapSampling = 1;
+    private int mMapRadius = 0;
+    private float  mMapRadiusMax = 5;
+    private boolean finBlur = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,9 +35,25 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        main_Main = (LinearLayout) findViewById(R.id.activity_main_main);
         mapFragment.getMapAsync(this);
+        SlidingUpPanelLayout sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        sl.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                if(mMapRadius!=(int)(mMapRadiusMax * slideOffset)) {
+                    mMapRadius = (int) (mMapRadiusMax * slideOffset);
+                    blurMap();
+                    Log.d("MapRadius",""+mMapRadius);
+                }
+            }
 
-        SlidingUpPanelLayout sl = (SlidingUpPanelLayout)findViewById(R.id.sliding_layout);
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+
+            }
+        });
+
     }//https://github.com/umano/AndroidSlidingUpPanel
     //https://github.com/Manabu-GT/EtsyBlur BLUR EFFECT
 //    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -44,10 +72,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMinZoomPreference(15.0f);
         mMap.setMaxZoomPreference(20.0f);
-        mMap.setPadding(40,0,0,60);
+        mMap.setPadding(40, 0, 0, 60);
         // Add a marker in Sydney and move the camera
         LatLng coronado = new LatLng(32.6859, -117.1831);
         mMap.addMarker(new MarkerOptions().position(coronado).title("Marker in Coronado"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
+        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+            @Override
+            public void onSnapshotReady(Bitmap bitmap) {
+                ImageView blurView = (ImageView) findViewById(R.id.blur_view);
+                blurView.setVisibility(View.VISIBLE);
+                blurView.setImageBitmap(bitmap);
+                ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
+                Blurry.with(getApplicationContext()).radius((int)mMapRadius).sampling(mMapSampling).onto(mRootLayout);
+            }
+        });
     }
+
+    private void blurMap() {
+        ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
+        Blurry.delete(mRootLayout);
+        Blurry.with(getApplicationContext()).radius((int)mMapRadius).sampling(mMapSampling).onto(mRootLayout);
+    }
+
 }
