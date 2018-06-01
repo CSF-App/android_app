@@ -14,6 +14,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
     <!--https://github.com/umano/AndroidSlidingUpPanel-->
+
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
@@ -45,13 +46,29 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header" >
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_view">
 
     </android.support.design.widget.NavigationView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_open_nav"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1" />
+    </RelativeLayout>
+
 </android.support.v4.widget.DrawerLayout>
 <!--</LinearLayout>-->

@@ -7,12 +7,15 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +36,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LinearLayout main_Main;
     private DrawerLayout drawerLayout;
+    private NavigationView navView;
     private Button buttonOpenNav;
     private Button buttonCenterMap;
     private int mMapSampling = 1;
@@ -41,6 +45,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private float  mMapRadiusMax = 8;
     private boolean deleted = false;
     private boolean collapsed = true;
+    private ViewGroup.MarginLayoutParams buttonCenterNavLayoutParams;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         buttonOpenNav = (Button)findViewById(R.id.button_open_nav);
         buttonCenterMap = (Button)findViewById(R.id.button_center_map);
+        buttonCenterNavLayoutParams= (ViewGroup.MarginLayoutParams) buttonOpenNav.getLayoutParams();
+        navView = (NavigationView)findViewById(R.id.nav_view);
         mapFragment.getMapAsync(this);
         sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         sl.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
@@ -92,7 +99,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 /*ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone((ConstraintLayout)findViewById(R.id.layout_buttons));*/
-
+                if (buttonOpenNav.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                    float newMargin = 16+(float)navView.getWidth()*slideOffset;
+                    Log.d("Drawer",""+newMargin);
+                    //buttonCenterNavLayoutParams.setMargins((int)newMargin,16,(int)((float)buttonCenterNavLayoutParams.rightMargin-newMargin),16);
+                    buttonCenterNavLayoutParams.setMargins((int)newMargin,buttonCenterNavLayoutParams.topMargin,buttonCenterNavLayoutParams.rightMargin,buttonCenterNavLayoutParams.bottomMargin);
+                    buttonOpenNav.requestLayout();
+                }
             }
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
