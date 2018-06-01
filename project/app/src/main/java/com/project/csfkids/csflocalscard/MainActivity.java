@@ -6,11 +6,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -29,10 +32,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private final boolean enableBlur = false;
     private GoogleMap mMap;
     private LinearLayout main_Main;
+    private DrawerLayout drawerLayout;
+    private Button buttonOpenNav;
+    private Button buttonCenterMap;
     private int mMapSampling = 1;
     private int mMapRadius = 0;
+    private SlidingUpPanelLayout sl;
     private float  mMapRadiusMax = 8;
     private boolean deleted = false;
+    private boolean collapsed = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +49,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         main_Main = (LinearLayout) findViewById(R.id.activity_main_main);
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        buttonOpenNav = (Button)findViewById(R.id.button_open_nav);
+        buttonCenterMap = (Button)findViewById(R.id.button_center_map);
         mapFragment.getMapAsync(this);
-        SlidingUpPanelLayout sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         sl.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
@@ -62,14 +73,33 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-
+                if(newState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                    collapsed = true;
+                }
+                else if(newState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)){
+                    collapsed = false;
+                }
             }
         });
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                Log.d("DrawerSlide","Offset: " +slideOffset);
+                if(collapsed == false) {
+                    sl.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    collapsed = true;
+                }
+                /*ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone((ConstraintLayout)findViewById(R.id.layout_buttons));*/
+
+            }
+        };
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
     }//https://github.com/umano/AndroidSlidingUpPanel
     //https://github.com/Manabu-GT/EtsyBlur BLUR EFFECT
 //    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -83,15 +113,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //mMap.setMinZoomPreference(15.0f);
-        mMap.setMinZoomPreference(12.0f);
+        mMap.setMinZoomPreference(15.0f);
         mMap.setMaxZoomPreference(20.0f);
-        mMap.setPadding(40,40,40,180);
+        mMap.setPadding(0,200,0,200);
         LatLng curLatLng = mMap.getCameraPosition().target;
         Log.d("Google Maps","LAT: "+curLatLng.latitude+", LON: " + curLatLng.longitude);
         // Add a marker in Sydney and move the camera
         LatLng coronado = new LatLng(32.6859, -117.1831);
-        mMap.addMarker(new MarkerOptions().position(coronado).title("Marker in Coronado"));
+        if(BuildConfig.DEBUG) {
+            mMap.addMarker(new MarkerOptions().position(coronado).title("Marker in Coronado"));
+        }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
         /*mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
             @Override
