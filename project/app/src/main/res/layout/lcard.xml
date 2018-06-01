@@ -10,15 +10,29 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="178dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="103dp"
         android:layout_marginLeft="103dp"
         android:layout_marginRight="103dp"
         android:layout_marginStart="103dp"
-        android:contentDescription="slide up bar"
+        android:src="@drawable/ic_slide_up_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_slide_up_bar" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lcard_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lcard_text"
+        android:textAllCaps="true"
+        android:textColor="@color/lcard_text_color"
+        android:textSize="40dp"
+        android:typeface="normal"
+        app:fontFamily="sans-serif-condensed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 </android.support.constraint.ConstraintLayout>

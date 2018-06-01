@@ -1,6 +1,10 @@
 package com.project.csfkids.csflocalscard;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -22,12 +26,13 @@ import jp.wasabeef.blurry.Blurry;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private final boolean enableBlur = false;
     private GoogleMap mMap;
     private LinearLayout main_Main;
     private int mMapSampling = 1;
     private int mMapRadius = 0;
-    private float  mMapRadiusMax = 5;
-    private boolean finBlur = true;
+    private float  mMapRadiusMax = 8;
+    private boolean deleted = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +46,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         sl.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                if(mMapRadius!=(int)(mMapRadiusMax * slideOffset)) {
-                    mMapRadius = (int) (mMapRadiusMax * slideOffset);
-                    blurMap();
-                    Log.d("MapRadius",""+mMapRadius);
-                }
+                /*if(enableBlur) {
+                    if (slideOffset == 0 && deleted == false) {
+                        Blurry.delete((ConstraintLayout) findViewById(R.id.content_frame));
+                        deleted = true;
+                    }
+                    if (mMapRadius != (int) (mMapRadiusMax * slideOffset)) {
+                        mMapRadius = (int) (mMapRadiusMax * slideOffset);
+                        deleted = false;
+                        blurMap();
+                        Log.d("MapRadius", "" + mMapRadius);
+                    }
+                }*/
             }
 
             @Override
@@ -67,17 +79,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    private double longitude, latitude;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMinZoomPreference(15.0f);
+        //mMap.setMinZoomPreference(15.0f);
+        mMap.setMinZoomPreference(12.0f);
         mMap.setMaxZoomPreference(20.0f);
-        mMap.setPadding(40, 0, 0, 60);
+        mMap.setPadding(40,40,40,180);
+        LatLng curLatLng = mMap.getCameraPosition().target;
+        Log.d("Google Maps","LAT: "+curLatLng.latitude+", LON: " + curLatLng.longitude);
         // Add a marker in Sydney and move the camera
         LatLng coronado = new LatLng(32.6859, -117.1831);
         mMap.addMarker(new MarkerOptions().position(coronado).title("Marker in Coronado"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
-        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+        /*mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
             @Override
             public void onSnapshotReady(Bitmap bitmap) {
                 ImageView blurView = (ImageView) findViewById(R.id.blur_view);
@@ -86,13 +102,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
                 Blurry.with(getApplicationContext()).radius((int)mMapRadius).sampling(mMapSampling).onto(mRootLayout);
             }
-        });
+        });*/
     }
 
     private void blurMap() {
-        ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
+        /*ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
         Blurry.delete(mRootLayout);
-        Blurry.with(getApplicationContext()).radius((int)mMapRadius).sampling(mMapSampling).onto(mRootLayout);
+        Blurry.with(getApplicationContext()).radius((int)mMapRadius).sampling(mMapSampling).onto(mRootLayout);*/
     }
 
 }
