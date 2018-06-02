@@ -14,11 +14,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,7 +49,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private float  mMapRadiusMax = 8;
     private boolean deleted = false;
     private boolean collapsed = true;
-    private ViewGroup.MarginLayoutParams buttonCenterNavLayoutParams;
+    private boolean mMapReady = false;
+    private ViewGroup.MarginLayoutParams buttonOpenNavLayoutParams;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +62,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         buttonOpenNav = (Button)findViewById(R.id.button_open_nav);
         buttonCenterMap = (Button)findViewById(R.id.button_center_map);
-        buttonCenterNavLayoutParams= (ViewGroup.MarginLayoutParams) buttonOpenNav.getLayoutParams();
+        buttonOpenNavLayoutParams= (ViewGroup.MarginLayoutParams) buttonOpenNav.getLayoutParams();
         navView = (NavigationView)findViewById(R.id.nav_view);
         mapFragment.getMapAsync(this);
         sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -99,18 +104,33 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 /*ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone((ConstraintLayout)findViewById(R.id.layout_buttons));*/
-                if (buttonOpenNav.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                    float newMargin = 16+(float)navView.getWidth()*slideOffset;
-                    Log.d("Drawer",""+newMargin);
-                    //buttonCenterNavLayoutParams.setMargins((int)newMargin,16,(int)((float)buttonCenterNavLayoutParams.rightMargin-newMargin),16);
-                    buttonCenterNavLayoutParams.setMargins((int)newMargin,buttonCenterNavLayoutParams.topMargin,buttonCenterNavLayoutParams.rightMargin,buttonCenterNavLayoutParams.bottomMargin);
-                    buttonOpenNav.requestLayout();
-                }
+                FrameLayout.LayoutParams blp = (FrameLayout.LayoutParams)buttonOpenNav.getLayoutParams();
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(toDp(46),toDp(46));
+                float newMargin = toDp(16)+(float)navView.getWidth()*slideOffset;
+                lp.setMargins((int)newMargin,blp.topMargin,0,0);
+                FrameLayout fl = (FrameLayout)findViewById(R.id.frameButtonOpenNav);
+                fl.removeView(buttonOpenNav);
+                fl.addView(buttonOpenNav,lp);
             }
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-    }//https://github.com/umano/AndroidSlidingUpPanel
+        buttonOpenNav.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.START);
+            }
+        });
+
+        buttonCenterMap.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                if(mMapReady){
+                    LatLng coronado = new LatLng(32.6859, -117.1831);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
+                }
+            }
+        });
+    }
+    //https://github.com/umano/AndroidSlidingUpPanel
     //https://github.com/Manabu-GT/EtsyBlur BLUR EFFECT
 //    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     /**
@@ -123,8 +143,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
     private double longitude, latitude;
+
+
+    public int toDp(int h){
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, h, getResources().getDisplayMetrics());
+    }
+
+    public float toDp(float h){
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, h, getResources().getDisplayMetrics());
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMapReady = true;
         mMap = googleMap;
         mMap.setMinZoomPreference(15.0f);
         mMap.setMaxZoomPreference(20.0f);

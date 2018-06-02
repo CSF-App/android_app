@@ -55,20 +55,24 @@
 
     </android.support.design.widget.NavigationView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/button_open_nav"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1" />
-    </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/frameButtonOpenNav"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/button_open_nav"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1" />
+        </FrameLayout>
+
 
 </android.support.v4.widget.DrawerLayout>
 <!--</LinearLayout>-->
