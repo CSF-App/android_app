@@ -34,7 +34,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import jp.wasabeef.blurry.Blurry;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, PHPListener {
 
     private final boolean enableBlur = false;
     private GoogleMap mMap;
@@ -58,6 +58,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        //GET MERCHANT DATA
+        merchantData mdat = new merchantData(getString(R.string.url_merchants));
+        mdat.load();
         main_Main = (LinearLayout) findViewById(R.id.activity_main_main);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         buttonOpenNav = (Button)findViewById(R.id.button_open_nav);
@@ -183,6 +187,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         /*ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
         Blurry.delete(mRootLayout);
         Blurry.with(getApplicationContext()).radius((int)mMapRadius).sampling(mMapSampling).onto(mRootLayout);*/
+    }
+
+    public void onTaskCompleted(String output){
+
     }
 
 }
