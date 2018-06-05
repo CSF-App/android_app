@@ -14,7 +14,7 @@ public class merchantData implements PHPListener {
     private String url;
     public void load(){
         mAuth = new GetPHP(this, url);
-        mAuth.execute(new String[]{});
+        mAuth.execute(new String[]{"",""});
     }
 
     public merchantData(String a){
@@ -22,6 +22,6 @@ public class merchantData implements PHPListener {
     }
 
     public void onTaskCompleted(String output){
-        Log.d("XD",output);
+        Log.d("merchantData",output);
     }
 }

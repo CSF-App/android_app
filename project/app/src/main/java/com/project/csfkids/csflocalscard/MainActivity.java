@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,6 +46,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private NavigationView navView;
     private Button buttonOpenNav;
     private Button buttonCenterMap;
+    private TextInputEditText searchBar;
     private int mMapSampling = 1;
     private int mMapRadius = 0;
     private SlidingUpPanelLayout sl;
@@ -68,6 +72,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         buttonCenterMap = (Button)findViewById(R.id.button_center_map);
         buttonOpenNavLayoutParams= (ViewGroup.MarginLayoutParams) buttonOpenNav.getLayoutParams();
         navView = (NavigationView)findViewById(R.id.nav_view);
+        searchBar = (TextInputEditText)findViewById(R.id.search_bar);
         mapFragment.getMapAsync(this);
         sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         sl.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
@@ -130,6 +135,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if(mMapReady){
                     LatLng coronado = new LatLng(32.6859, -117.1831);
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
+                }
+            }
+        });
+
+        searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    sl.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    Log.d("ASJF:AJSL:KFJASL:F", "Xasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfkas'd;kfpda siiopfuvja;sv;sf;ljf;kldsajl;kasfdjlkdsfjlfdsajlfdasjdsklfa;l;kjfdas;lkj;lkjdsf;lkjlj;kfds;ljkj;lfkadskjl;D");
                 }
             }
         });
