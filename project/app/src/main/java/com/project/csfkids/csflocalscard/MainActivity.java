@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,7 +37,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import jp.wasabeef.blurry.Blurry;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, PHPListener {
 
     private final boolean enableBlur = false;
     private GoogleMap mMap;
@@ -43,6 +46,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private NavigationView navView;
     private Button buttonOpenNav;
     private Button buttonCenterMap;
+    private TextInputEditText searchBar;
     private int mMapSampling = 1;
     private int mMapRadius = 0;
     private SlidingUpPanelLayout sl;
@@ -58,12 +62,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        //GET MERCHANT DATA
+        merchantData mdat = new merchantData(getString(R.string.url_merchants));
+        mdat.load();
         main_Main = (LinearLayout) findViewById(R.id.activity_main_main);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         buttonOpenNav = (Button)findViewById(R.id.button_open_nav);
         buttonCenterMap = (Button)findViewById(R.id.button_center_map);
         buttonOpenNavLayoutParams= (ViewGroup.MarginLayoutParams) buttonOpenNav.getLayoutParams();
         navView = (NavigationView)findViewById(R.id.nav_view);
+        searchBar = (TextInputEditText)findViewById(R.id.search_bar);
         mapFragment.getMapAsync(this);
         sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         sl.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
@@ -129,6 +138,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+
+        searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    sl.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    Log.d("ASJF:AJSL:KFJASL:F", "Xasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfkas'd;kfpda siiopfuvja;sv;sf;ljf;kldsajl;kasfdjlkdsfjlfdsajlfdasjdsklfa;l;kjfdas;lkj;lkjdsf;lkjlj;kfds;ljkj;lfkadskjl;D");
+                }
+            }
+        });
     }
     //https://github.com/umano/AndroidSlidingUpPanel
     //https://github.com/Manabu-GT/EtsyBlur BLUR EFFECT
@@ -183,6 +202,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         /*ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
         Blurry.delete(mRootLayout);
         Blurry.with(getApplicationContext()).radius((int)mMapRadius).sampling(mMapSampling).onto(mRootLayout);*/
+    }
+
+    public void onTaskCompleted(String output){
+
     }
 
 }
