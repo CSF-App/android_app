@@ -6,13 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/button_center_map"
         android:layout_width="46dp"
         android:layout_height="46dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:saveEnabled="true"
+        android:scaleType="centerCrop"
+        android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_icon_center" />
+
 </android.support.constraint.ConstraintLayout>
