@@ -34,6 +34,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -181,11 +182,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMaxZoomPreference(20.0f);
         mMap.setPadding(0,200,0,200);
         LatLng curLatLng = mMap.getCameraPosition().target;
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                return false;
+            }
+        });
         Log.d("Google Maps","LAT: "+curLatLng.latitude+", LON: " + curLatLng.longitude);
         // Add a marker in Sydney and move the camera
         LatLng coronado = new LatLng(32.6859, -117.1831);
         if(BuildConfig.DEBUG) {
-            mMap.addMarker(new MarkerOptions().position(coronado).title("Marker in Coronado"));
+            mMap.addMarker(new MarkerOptions().position(coronado).title("Coronado"));
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
         /*mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
