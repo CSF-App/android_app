@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.widget.AppCompatImageButton;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements PHPListener {
         //Buttons
         Button signInButton = (Button) findViewById(R.id.sign_in_button);
         Button signUpButton = (Button) findViewById(R.id.sign_up_button);
-        Button backButton = (Button) findViewById(R.id.back_button);
+        AppCompatImageButton backButton = (AppCompatImageButton) findViewById(R.id.back_button);
         backButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 switchToMain();

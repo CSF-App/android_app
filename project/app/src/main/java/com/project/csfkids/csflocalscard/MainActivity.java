@@ -116,9 +116,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 /*ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone((ConstraintLayout)findViewById(R.id.layout_buttons));*/
                 FrameLayout.LayoutParams blp = (FrameLayout.LayoutParams)buttonOpenNav.getLayoutParams();
-                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(toDp(46),toDp(46));
-                float newMargin = toDp(16)+(float)navView.getWidth()*slideOffset;
-                lp.setMargins((int)newMargin,blp.topMargin,0,0);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(toDp(26),toDp(26));
+                float newMargin = toDp(23)+(float)navView.getWidth()*slideOffset;
+                lp.setMargins((int)newMargin,toDp(23),0,0);
                 FrameLayout fl = (FrameLayout)findViewById(R.id.frameButtonOpenNav);
                 fl.removeView(buttonOpenNav);
                 fl.addView(buttonOpenNav,lp);

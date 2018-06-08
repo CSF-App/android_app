@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303f9f</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="lcard_text_color">#ff5e00</color>
+    <color name="colorPrimary">#005EB8</color>
+    <color name="colorPrimaryDark">#18006D</color>
+    <color name="colorPrimaryBlue">#005EB8</color>
+    <color name="colorPrimaryYellow">#F3D03E</color>
+    <color name="colorSecondaryBlue">#00A9E0</color>
+    <color name="colorSecondaryGrey">#D9D9D6</color>
+    <color name="colorSecondaryGray">#D9D9D6</color>
+    <color name="colorAccent">#FF6A39</color>
+    <color name="colorAccentLight">#FF8649</color>
+    <color name="colorAccentDark">#B02A00</color>
+    <color name="colorBlack">#000000</color>
+    <color name="lcard_exp_good">#14ca00</color>
 </resources>

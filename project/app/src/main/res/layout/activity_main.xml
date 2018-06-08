@@ -68,14 +68,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <AppCompatImageButton
+            <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/button_open_nav"
-                android:layout_width="46dp"
-                android:layout_height="46dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:saveEnabled="true"
+                android:scaleType="centerCrop"
                 android:background="@null"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginLeft="23dp"
+                android:layout_marginStart="23dp"
+                android:layout_marginTop="23dp"
                 app:srcCompat="@drawable/ic_icon_menu" />
         </FrameLayout>
 

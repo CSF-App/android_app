@@ -20,4 +20,7 @@
     <string name="lcard_text">LOCALS CARD</string>
     <string name="open">Open</string>
     <string name="close">Open</string>
+    <string name="nav_header_text">Menu</string>
+    <string name="lcard_your_number">Your locals card number is</string>
+    <string name="lcard_exp">Expiration Date:</string>
 </resources>

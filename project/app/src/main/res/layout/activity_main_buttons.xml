@@ -8,11 +8,11 @@
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/button_center_map"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="23dp"
+        android:layout_marginTop="23dp"
         android:saveEnabled="true"
         android:scaleType="centerCrop"
         android:background="@null"
