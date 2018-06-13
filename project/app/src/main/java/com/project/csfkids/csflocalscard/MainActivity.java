@@ -38,6 +38,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import jp.wasabeef.blurry.Blurry;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, PHPListener {
@@ -178,17 +182,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMapReady = true;
         mMap = googleMap;
-        mMap.setMinZoomPreference(15.0f);
+        mMap.setMinZoomPreference(12.0f);
         mMap.setMaxZoomPreference(20.0f);
         mMap.setPadding(0,200,0,200);
         LatLng curLatLng = mMap.getCameraPosition().target;
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
                 return false;
             }
         });
+        for(String key : merchantData.merchantMap.keySet()) {
+            Map<String,String> mdat = merchantData.merchantMap.get(key);
+            float la = Float.parseFloat(mdat.get("lat"));
+            float lo = Float.parseFloat(mdat.get("long"));
+            LatLng keyLatLng = new LatLng(la, lo);
+            mMap.addMarker(new MarkerOptions().position(keyLatLng).title(key));
+        }
         Log.d("Google Maps","LAT: "+curLatLng.latitude+", LON: " + curLatLng.longitude);
         // Add a marker in Sydney and move the camera
         LatLng coronado = new LatLng(32.6859, -117.1831);
