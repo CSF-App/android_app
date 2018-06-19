@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.NavigationView;
@@ -39,8 +40,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import jp.wasabeef.blurry.Blurry;
 
@@ -192,10 +195,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
-        for(String key : merchantData.merchantMap.keySet()) {
-            Map<String,String> mdat = merchantData.merchantMap.get(key);
-            float la = Float.parseFloat(mdat.get("lat"));
-            float lo = Float.parseFloat(mdat.get("long"));
+        HashMap<String, HashMap<String,String>> xd = new HashMap<String, HashMap<String, String>>(){{
+            put("California American Water", new HashMap<String, String>(){{
+                put("bname","California American Water");
+                put("pcat","Services");
+                put("pstreet","1025 Palm Avenue");
+                put("pcity","Imperial Beach");
+                put("pstate","CA");
+                put("pzip","91932");
+                put("phone","1-619-446-5707");
+                put("web","http://amwater.com/caaw");
+                put("mail",null);
+                put("lat",Double.toString(32.583551));
+                put("lng",Double.toString(-117.111496));
+                put("deal","Free program that will help save water and money." +
+                        " A conservation specialist will visit your home or business" +
+                        " to identify ways to save water indoors and out, check  irrigation" +
+                        " systems for leaks, teach to read the meter, and create an" +
+                        " annual watering schedule.");
+            }});
+        }};
+        for(String key : xd.keySet()) {
+            HashMap<String,String> mdat = xd.get(key);
+            double la = Double.parseDouble(mdat.get("lat"));
+            double lo = Double.parseDouble(mdat.get("lng"));
+            Log.d("LatLong",""+key+":LAT"+la+", LNG"+lo);
             LatLng keyLatLng = new LatLng(la, lo);
             mMap.addMarker(new MarkerOptions().position(keyLatLng).title(key));
         }
