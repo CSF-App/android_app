@@ -7,9 +7,12 @@
     <color name="colorSecondaryBlue">#00A9E0</color>
     <color name="colorSecondaryGrey">#D9D9D6</color>
     <color name="colorSecondaryGray">#D9D9D6</color>
-    <color name="colorAccent">#FF6A39</color>
-    <color name="colorAccentLight">#FF8649</color>
-    <color name="colorAccentDark">#B02A00</color>
+    <color name="colorAccent">#000000</color>
+    <color name="colorAccentLight">#FFE068</color>
+    <color name="colorAccentDark">#AA8700</color>
     <color name="colorBlack">#000000</color>
     <color name="lcard_exp_good">#14ca00</color>
+    <color name="mdatbluetrim">#00a9e0</color>
+    <color name="url_color_xd">#0000eb</color>
+    <color name="charcoal">#282828</color>
 </resources>

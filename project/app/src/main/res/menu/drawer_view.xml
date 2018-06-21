@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:title="CAM" />
+            android:id="@+id/nav_options"
+            android:title="@string/nav_options" />
         <item
-            android:id="@+id/nav_gallery"
-            android:title="GAL" />
+            android:id="@+id/nav_register"
+            android:title="@string/nav_register" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:title="SLID" />
+            android:id="@+id/nav_about"
+            android:title="@string/nav_about" />
         <item
-            android:id="@+id/nav_manage"
-            android:title="MAN" />
+            android:id="@+id/nav_signout"
+            android:title="@string/nav_signout" />
     </group>
 </menu>

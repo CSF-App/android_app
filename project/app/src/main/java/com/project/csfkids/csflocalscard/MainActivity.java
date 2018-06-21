@@ -1,10 +1,14 @@
 package com.project.csfkids.csflocalscard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -39,6 +43,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.w3c.dom.Text;
+
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -64,7 +72,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean deleted = false;
     private boolean collapsed = true;
     private boolean mMapReady = false;
+    private int markerClickAnimateDuration = 200;
+    private ConstraintLayout donateButtonMenu;
     private ViewGroup.MarginLayoutParams buttonOpenNavLayoutParams;
+    private String donateUrl;
+
+    //MDAT
+    private ConstraintLayout mDat;
+    private ImageView mDatExterior;
+    private LinearLayout mDatContainer;
+    private TextView mDatBName;
+    private ImageView mDatBImage;
+    private TextView mDatDescription;
+    private TextView mDatURL;
+    private mdatController mDatController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +95,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
 
         //GET MERCHANT DATA
-        merchantData mdat = new merchantData(getString(R.string.url_merchants));
-        mdat.load();
         main_Main = (LinearLayout) findViewById(R.id.activity_main_main);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         buttonOpenNav = (AppCompatImageButton) findViewById(R.id.button_open_nav);
@@ -83,6 +102,30 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         buttonOpenNavLayoutParams= (ViewGroup.MarginLayoutParams) buttonOpenNav.getLayoutParams();
         navView = (NavigationView)findViewById(R.id.nav_view);
         searchBar = (TextInputEditText)findViewById(R.id.search_bar);
+        //donateButtonMenu = findViewById(R.id.menu_donate_button);
+        donateUrl = getString(R.string.url_donate);
+        //MDAT
+        mDat = findViewById(R.id.mdat);
+        mDatExterior = findViewById(R.id.mdat_exterior);
+        mDatContainer = findViewById(R.id.mdat_container);
+        mDatBName = findViewById(R.id.mdat_bname);
+        mDatBImage = findViewById(R.id.mdat_bimage);
+        mDatDescription = findViewById(R.id.mdat_description);
+        mDatURL = findViewById(R.id.mdat_link);
+        mDatController = new mdatController();
+        mDatController.hide();
+        mDatContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        mDatExterior.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatController.hide();
+            }
+        });
+
         mapFragment.getMapAsync(this);
         sl = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         sl.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
@@ -144,7 +187,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v){
                 if(mMapReady){
                     LatLng coronado = new LatLng(32.6859, -117.1831);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(coronado),100,null);
                 }
             }
         });
@@ -154,10 +197,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus) {
                     sl.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                    Log.d("ASJF:AJSL:KFJASL:F", "Xasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfkas'd;kfpda siiopfuvja;sv;sf;ljf;kldsajl;kasfdjlkdsfjlfdsajlfdasjdsklfa;l;kjfdas;lkj;lkjdsf;lkjlj;kfds;ljkj;lfkadskjl;D");
                 }
             }
         });
+
     }
     //https://github.com/umano/AndroidSlidingUpPanel
     //https://github.com/Manabu-GT/EtsyBlur BLUR EFFECT
@@ -171,8 +214,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    private double longitude, latitude;
-
 
     public int toDp(int h){
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, h, getResources().getDisplayMetrics());
@@ -181,21 +222,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public float toDp(float h){
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, h, getResources().getDisplayMetrics());
     }
+
+    HashMap<String, HashMap<String,String>> xd;
+    public static HashMap<String,String> currentMarker = null;
+    Marker coronadoMarker;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMapReady = true;
         mMap = googleMap;
-        mMap.setMinZoomPreference(12.0f);
+        mMap.setMinZoomPreference(14.0f);
         mMap.setMaxZoomPreference(20.0f);
         mMap.setPadding(0,200,0,200);
         LatLng curLatLng = mMap.getCameraPosition().target;
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                return false;
-            }
-        });
-        HashMap<String, HashMap<String,String>> xd = new HashMap<String, HashMap<String, String>>(){{
+        xd = new HashMap<String, HashMap<String, String>>(){{
             put("California American Water", new HashMap<String, String>(){{
                 put("bname","California American Water");
                 put("pcat","Services");
@@ -213,21 +252,84 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         " to identify ways to save water indoors and out, check  irrigation" +
                         " systems for leaks, teach to read the meter, and create an" +
                         " annual watering schedule.");
+                put("bimage",""+R.drawable.american_water);
+            }});
+            put("High Tide Bottle Shop & Kitchen", new HashMap<String, String>(){{
+                put("bname","High Tide Bottle Shop & Kitchen");
+                put("pcat","Dining");
+                put("pstreet","933 Orange Avenue");
+                put("pcity","Coronado");
+                put("pstate","CA");
+                put("pzip","92118");
+                put("phone","1-619-435-1380");
+                put("web","http://www.hightidecoronado.com/");
+                put("mail",null);
+                put("lat",Double.toString(32.686875));
+                put("lng",Double.toString(-117.179192));
+                put("deal","10% off any food item. Not to be combined with any other offer.");
+                put("bimage",""+R.drawable.high_tide);
+            }});
+            put("Emerald City The Boarding Source", new HashMap<String, String>(){{
+                put("bname","Emerald City The Boarding Source");
+                put("pcat","Shopping");
+                put("pstreet","1118 Orange Ave");
+                put("pcity","Coronado");
+                put("pstate","CA");
+                put("pzip","92118");
+                put("phone","1-619-435-6677");
+                put("web","http:///www.emeraldcitysurf.com");
+                put("mail",null);
+                put("lat",Double.toString(32.684714));
+                put("lng",Double.toString(-117.179826));
+                put("deal","10% off regularly priced merchandise everyday.20% off Emerald City items.1/2 off rentals Monday-Friday only.");
+                put("bimage",""+R.drawable.emerald_city);
+            }});
+            put("Charisma", new HashMap<String, String>(){{
+                put("bname","Charisma");
+                put("pcat","Shopping");
+                put("pstreet","1158 Orange Ave");
+                put("pcity","Coronado");
+                put("pstate","CA");
+                put("pzip","92118");
+                put("phone","1-619-435-5542");
+                put("web","http://www.charismacoronado.com/");
+                put("mail",null);
+                put("lat",Double.toString(32.684351));
+                put("lng",Double.toString(-117.179380));
+                put("deal","10% off in stock merchandise, some exceptions apply");
+                put("bimage",""+R.drawable.charisma);
             }});
         }};
+
         for(String key : xd.keySet()) {
             HashMap<String,String> mdat = xd.get(key);
             double la = Double.parseDouble(mdat.get("lat"));
             double lo = Double.parseDouble(mdat.get("lng"));
             Log.d("LatLong",""+key+":LAT"+la+", LNG"+lo);
             LatLng keyLatLng = new LatLng(la, lo);
-            mMap.addMarker(new MarkerOptions().position(keyLatLng).title(key));
+            Marker a = mMap.addMarker(new MarkerOptions().position(keyLatLng).title(key));
         }
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                mMap.animateCamera (
+                        CameraUpdateFactory.newLatLngZoom(marker.getPosition(),mMap.getCameraPosition().zoom),
+                        markerClickAnimateDuration, null);
+                if(xd.containsKey(marker.getTitle())) {
+                    Log.d("MARKER CLICKED",xd.get(marker.getTitle()).get("pstreet"));
+                    mDatController.setData(xd.get(marker.getTitle()));
+                    mDatController.show();
+                    return true;
+                }
+                marker.showInfoWindow();
+                return false;
+            }
+        });
         Log.d("Google Maps","LAT: "+curLatLng.latitude+", LON: " + curLatLng.longitude);
         // Add a marker in Sydney and move the camera
         LatLng coronado = new LatLng(32.6859, -117.1831);
         if(BuildConfig.DEBUG) {
-            mMap.addMarker(new MarkerOptions().position(coronado).title("Coronado"));
+            mMap.addMarker(new MarkerOptions().position(coronado).title("Coronado").snippet("THIS IS CORONADO"));
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coronado));
         /*mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
@@ -242,6 +344,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });*/
     }
 
+
     private void blurMap() {
         /*ConstraintLayout mRootLayout = (ConstraintLayout) findViewById(R.id.content_frame);
         Blurry.delete(mRootLayout);
@@ -252,4 +355,80 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+    class mdatController {
+        private boolean state = false;
+        public final boolean mdatActive = true;
+        public final boolean mdatHidden = false;
+        private HashMap<String, String> mdatData = null;
+        public void show(){
+            if(mdatData != null) {
+                mDat.setVisibility(View.VISIBLE);
+                state = true;
+            }
+            else
+                state = false;
+        }
+        public void setData(HashMap<String, String> dat){
+            mdatData = new HashMap<String, String>(dat);
+            mDatBName.setText(mdatData.get("bname"));
+            /*if(!mdatData.containsKey("bimage")) {
+                new DownLoadImageTask(mDatBImage).execute(mdatData.get("bimage"));
+            }*/
+
+            mDatBImage.setImageResource(Integer.parseInt(mdatData.get("bimage")));
+            mDatDescription.setText(mdatData.get("deal"));
+            mDatURL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri uri = Uri.parse(mdatData.get("web"));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
+            });
+        }
+        public void hide(){
+            mDat.setVisibility(View.GONE);
+            state = false;
+        }
+
+        public boolean getState() {
+            return state;
+        }
+    }
+    private class DownLoadImageTask extends AsyncTask<String,Void,Bitmap> {
+        ImageView imageView;
+
+        public DownLoadImageTask(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        /*
+            doInBackground(Params... params)
+                Override this method to perform a computation on a background thread.
+         */
+        protected Bitmap doInBackground(String...urls){
+            String urlOfImage = urls[0];
+            Bitmap logo = null;
+            try{
+                InputStream is = new URL(urlOfImage).openStream();
+                /*
+                    decodeStream(InputStream is)
+                        Decode an input stream into a bitmap.
+                 */
+                logo = BitmapFactory.decodeStream(is);
+            }catch(Exception e){ // Catch the download exception
+                e.printStackTrace();
+            }
+            return logo;
+        }
+
+        /*
+            onPostExecute(Result result)
+                Runs on the UI thread after doInBackground(Params...).
+         */
+        protected void onPostExecute(Bitmap result){
+            imageView.setImageBitmap(result);
+        }
+    }
 }

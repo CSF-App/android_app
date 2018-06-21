@@ -23,4 +23,10 @@
     <string name="nav_header_text">Menu</string>
     <string name="lcard_your_number">Your locals card number is</string>
     <string name="lcard_exp">Expiration Date:</string>
+    <string name="nav_about">About</string>
+    <string name="nav_options">Options</string>
+    <string name="nav_register">Register Card</string>
+    <string name="nav_signout">Sign Out</string>
+    <string name="donut">Donate Now!</string>
+    <string name="url_donate">https://www.google.com</string>
 </resources>
